@@ -26,6 +26,10 @@ docker run --rm \
   python:3.13 \
   bash -c "pip install -r requirements.txt && python ingest.py --year 2025 --month 11"
 
+
+or new 
+python ingest.py --year 2021 --month 1 --table green_taxi_data --host localhost --user root --password root --port 5432
+
 -- =========================================
 -- SQL Queries 
 -- =========================================
