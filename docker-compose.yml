@@ -1,0 +1,67 @@
+version: "3.9"
+
+volumes:
+  ny_taxi_postgres_data:
+  pgadmin_data:
+  kestra_data:
+
+services:
+  pgdatabase:
+    image: postgres:17-alpine
+    container_name: pgdatabase
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ny_taxi
+    ports:
+      - "5432:5432"
+    volumes:
+      - ny_taxi_postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "8085:80"
+    depends_on:
+      - pgdatabase
+
+  kestra:
+    image: kestra/kestra:v1.1
+    container_name: kestra
+    user: "root"
+    command: server standalone
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - kestra_data:/app/storage
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/kestra-wd:/tmp/kestra-wd
+    environment:
+      KESTRA_CONFIGURATION: |
+        datasources:
+          postgres:
+            url: jdbc:postgresql://pgdatabase:5432/ny_taxi
+            driverClassName: org.postgresql.Driver
+            username: root
+            password: root
+        kestra:
+          repository:
+            type: postgres
+          queue:
+            type: postgres
+          storage:
+            type: local
+            local:
+              basePath: "/app/storage"
+          server:
+            basicAuth:
+              username: admin@kestra.io
+              password: Admin1234!
+          url: http://localhost:8080/
+    depends_on:
+      - pgdatabase
