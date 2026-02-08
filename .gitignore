@@ -256,3 +256,8 @@ terraform.rc
 # Uncomment the line below if you want to ignore planout files.
 # planoutterraform_variables/keys/my-creds.json
 terraform_variables/keys/my-creds.json
+
+.gc/
+*.json
+
+my-tech-notes/
