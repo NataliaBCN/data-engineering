@@ -1,0 +1,8 @@
+sources:
+  - name: raw
+    description: Raw taxi trip data
+    database: arctic-thought-459809-d1
+    schema: nytaxi_raw
+    tables:
+      - name: green_tripdata
+      - name: yellow_tripdata
