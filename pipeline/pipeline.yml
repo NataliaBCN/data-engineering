@@ -1,8 +1,0 @@
-name: taxi_revenue_pipeline
-
-schedule: "@daily"
-
-assets:
-  - ingestion.trips_raw
-  - staging.trips_cleaned
-  - reports.monthly_revenue
